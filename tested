@@ -1,5 +1,5 @@
 # powershell
-powershell scripts that work
+
 ##ADGroups + Name + GroupCategory + Members
 $adgroups = Get-ADGroup -Filter "name -like '*ggilje*'" | sort name
 
