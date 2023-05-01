@@ -1,1 +1,18 @@
- $tasks |where-object {$_.'task to run' -like '*powershell*'} |select-object hostname, 'task to run' | format-list
+-scheduledtask
+
+new
+get
+set
+remove
+
+
+get-scheduledtask | where-object {$_.taskname -like '*adobe*'} | select-object taskname,state | format-list
+
+
+
+
+
+
+
+
+$tasks |where-object {$_.'task to run' -like '*powershell*'} |select-object hostname, 'task to run' | format-list
