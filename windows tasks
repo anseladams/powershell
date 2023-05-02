@@ -5,14 +5,20 @@ get
 set
 remove
 
+get-command *scheduledtask
+
+get-scheduledtask -taskname *windows* 
+
+get-scheduledtask -taskname 'Office*'
+
+get-scheduledtask | where state -eq 'Ready'
 
 get-scheduledtask | where-object {$_.taskname -like '*adobe*'} | select-object taskname,state | format-list
-
-
-
-
-
-
-
-
 $tasks |where-object {$_.'task to run' -like '*powershell*'} |select-object hostname, 'task to run' | format-list
+
+ $action =new-scheduledtaskaction -execute "cmd.exe"
+ $trigger =new-scheduledtasktrigger -once -at 13:00
+ $task = new-scheduledtask -trigger $trigger -action $action
+ register-scheduledtask MYCMDTask -InputObject $task
+
+
