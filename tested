@@ -67,3 +67,55 @@ Remove-MsolUser –UserPrincipalName [username] –RemoveFromRecycleBin 
 Get-MsolUser -ReturnDeletedUsers | Remove-MsolUser -RemoveFromRecycleBin
 
 Get-MsolUser -ReturnDeletedUsers | Remove-MsolUser -RemoveFromRecycleBin -Force
+
+
+*********************************************************
+EOLine -archive and expanded policy commands
+
+ARCHIVING
+
+Enable-Mailbox -Identity ruud@lazyadmin.nl -Archive
+
+# You can first verify the list of mailboxes with:
+Get-Mailbox -Filter {ArchiveStatus -Eq "None" -AND RecipientTypeDetails -eq "UserMailbox"} | ft
+
+# Enable archive mailbox for all users:
+Get-Mailbox -Filter {ArchiveStatus -Eq "None" -AND RecipientTypeDetails -eq "UserMailbox"} | Enable-Mailbox -Archive
+	
+ENABLE AUTO EXPANDING
+# Connect to Exchange Online
+Connect-ExchangeOnline -UserPrincipalName ruud@lazyadmin.nl
+
+# Enable auto-expanding archive
+# Enable it for a single mailbox
+Enable-Mailbox ruud@lazyadmin.nl -AutoExpandingArchive
+
+# First connect to exchange online
+Connect-ExchangeOnline -UserPrincipalName ruud@lazyadmin.nl
+
+# Get all archiving policies
+Get-RetentionPolicyTag | where {$_.RetentionAction -eq 'MoveToArchive'}
+
+# Result
+Name                                      Type             Description
+----                                      ----             -----------
+Recoverable Items 14 days move to archive RecoverableItems Managed Content Settings
+Default 2 year move to archive            All              Managed Content Settings
+Personal 1 year move to archive           Personal         Managed Content Settings
+Personal never move to archive            Personal         Managed Content Settings
+Personal 5 year move to archive           Personal         Managed Content Settings
+
+New-RetentionPolicyTag "Personal 6 months move to archive" -Type Personal -RetentionEnabled $true -AgeLimitForRetention 180 -RetentionAction MoveToArchive
+
+
+# Create a new default policy
+New-RetentionPolicyTag "Company Default 1 year move to archive" -Type All -RetentionEnabled $true -AgeLimitForRetention 365 -RetentionAction MoveToArchive
+
+When you search for an item in Outlook it will by default search in the current mailbox. To search in the online Archive as well you will need to select All Mailboxes next to the search field.
+
+Searching through archived mail
+When you only want to search through the online archive, you will first need to select the Online Archive in the folder list, and then start the search.
+
+
+
+
