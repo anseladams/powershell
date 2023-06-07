@@ -33,9 +33,37 @@ Foreach($G In $Groups)
     *************************************
     "Windows Updates"
     -----------------
+    -Check for all installed KB's-
+    wmic qfe list
+    
     Install-Module PSWindowsUpdate [type A]
     Get-WindowsUpdate
     Install-WindowsUpdate
     Get-WindowsUpdate -AcceptAll -Install -AutoReboot
     
     Get-WindowsUpdate -Install -KBArticleID 'KB5021233'
+    *************************************
+    
+    "delete deleted users" MO365
+    Powershell scripts for MSOL
+
+To check version of PS 
+Get-Host
+
+Install-Module MSOnline
+
+To check: 
+Get-InstalledModule
+
+Install-Module MSOnline
+
+$Msolcred = Get-credential
+Connect-MsolService -Credential $MsolCred
+
+Get-MsolUser –ReturnDeletedUsers
+
+Remove-MsolUser –UserPrincipalName [username] –RemoveFromRecycleBin 
+
+Get-MsolUser -ReturnDeletedUsers | Remove-MsolUser -RemoveFromRecycleBin
+
+Get-MsolUser -ReturnDeletedUsers | Remove-MsolUser -RemoveFromRecycleBin -Force
