@@ -1,5 +1,9 @@
 # powershell
 
+
+"Get AD groups"
+----------------------------------
+
 ##ADGroups + Name + GroupCategory + Members
 $adgroups = Get-ADGroup -Filter "name -like '*ggilje*'" | sort name
 
@@ -25,3 +29,13 @@ Foreach($G In $Groups)
     
     ##get a SID
     C:\Windows\System32\wbem>wmic useraccount where name="XXXXX" get sid
+    
+    *************************************
+    "Windows Updates"
+    -----------------
+    Install-Module PSWindowsUpdate [type A]
+    Get-WindowsUpdate
+    Install-WindowsUpdate
+    Get-WindowsUpdate -AcceptAll -Install -AutoReboot
+    
+    Get-WindowsUpdate -Install -KBArticleID 'KB5021233'
